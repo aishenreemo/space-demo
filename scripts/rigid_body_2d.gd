@@ -5,8 +5,7 @@ func _ready() -> void:
 	self.position = owner.position
 	owner.position = Vector2.ZERO
 
-func _physics_process(delta: float) -> void:
-	var time_step = delta * 0.5
+func _integrate_forces(state: PhysicsDirectBodyState2D) -> void:
 	var parent = owner.get_parent() as NBodySimulation
 	var bodies = parent.get_children() as Array[CelestialBody]
 	var rbodies = bodies.map(func(b): return b.get_node("RigidBody2D") as RigidBody2D)
@@ -23,5 +22,5 @@ func _physics_process(delta: float) -> void:
 			self.position,
 			body.position
 		)
-		
-	self.linear_velocity += (force / self.mass) * time_step
+
+	state.linear_velocity += (force / self.mass) * state.step

@@ -1,76 +1,40 @@
-[gd_scene load_steps=7 format=3 uid="uid://b6iw5po2tlcck"]
+[gd_scene load_steps=6 format=3 uid="uid://b6iw5po2tlcck"]
 
 [ext_resource type="PackedScene" uid="uid://bopkeljeop74l" path="res://scenes/celestial_body.tscn" id="1_cvdfw"]
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_i1j4u"]
-[ext_resource type="Script" path="res://scripts/quit_button.gd" id="2_t8kej"]
-[ext_resource type="Script" path="res://scripts/state_button.gd" id="3_xewh1"]
+[ext_resource type="PackedScene" uid="uid://ltu0oxve8ru" path="res://scenes/canvas_layer.tscn" id="3_iaacc"]
 [ext_resource type="Script" path="res://scripts/camera_2d.gd" id="4_rops6"]
 [ext_resource type="Script" path="res://scripts/simulation.gd" id="4_vb0uj"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_i1j4u")
 
-[node name="Control" type="Control" parent="."]
+[node name="CanvasLayer" parent="." node_paths=PackedStringArray("simulation_node") instance=ExtResource("3_iaacc")]
+visible = false
+simulation_node = NodePath("../Simulation")
+
+[node name="Camera2D" type="Camera2D" parent="."]
 process_mode = 3
-layout_mode = 3
-anchors_preset = 0
-offset_left = -640.0
-offset_top = -360.0
-offset_right = 640.0
-offset_bottom = 360.0
-pivot_offset = Vector2(640, 360)
-
-[node name="MarginContainer" type="MarginContainer" parent="Control"]
-layout_mode = 2
-offset_right = 1280.0
-offset_bottom = 720.0
-theme_override_constants/margin_left = 15
-theme_override_constants/margin_top = 15
-theme_override_constants/margin_right = 15
-theme_override_constants/margin_bottom = 15
-
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer"]
-layout_mode = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="StateButton" type="Button" parent="Control/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "START"
-script = ExtResource("3_xewh1")
-
-[node name="Title" type="Label" parent="Control/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "PHYTOPIA"
-horizontal_alignment = 1
-
-[node name="QuitButton" type="Button" parent="Control/MarginContainer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-text = "QUIT"
-script = ExtResource("2_t8kej")
-
-[node name="Camera2D" type="Camera2D" parent="." node_paths=PackedStringArray("control_node")]
-process_mode = 3
+zoom = Vector2(0.5, 0.5)
+limit_left = -40960
+limit_top = -23040
+limit_right = 40960
+limit_bottom = 23040
+position_smoothing_enabled = true
+position_smoothing_speed = 10.0
+editor_draw_limits = true
 script = ExtResource("4_rops6")
-control_node = NodePath("../Control")
 
 [node name="Simulation" type="Node2D" parent="."]
 process_mode = 2
 script = ExtResource("4_vb0uj")
-prediction_duration = 100.0
+prediction_duration = 1.0
 gravitational_constant = 10000.0
 
 [node name="CelestialBody" parent="Simulation" instance=ExtResource("1_cvdfw")]
-position = Vector2(187, 235)
+mass = 20000.0
 
-[node name="CelestialBody3" parent="Simulation" instance=ExtResource("1_cvdfw")]
-position = Vector2(288, -189)
-
-[node name="CelestialBody4" parent="Simulation" instance=ExtResource("1_cvdfw")]
-position = Vector2(-277, -58)
-
-[connection signal="pressed" from="Control/MarginContainer/VBoxContainer/HBoxContainer/StateButton" to="Control/MarginContainer/VBoxContainer/HBoxContainer/StateButton" method="_on_pressed"]
-[connection signal="pressed" from="Control/MarginContainer/VBoxContainer/HBoxContainer/QuitButton" to="Control/MarginContainer/VBoxContainer/HBoxContainer/QuitButton" method="_on_pressed"]
+[node name="CelestialBody2" parent="Simulation" instance=ExtResource("1_cvdfw")]
+position = Vector2(230, 0)
+radius = 20.0
+initial_velocity = Vector2(0, 750)

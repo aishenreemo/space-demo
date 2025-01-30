@@ -4,10 +4,10 @@
 [ext_resource type="Script" path="res://scripts/trajectory_2d.gd" id="2_qu5mn"]
 [ext_resource type="Script" path="res://scripts/rigid_body_2d.gd" id="3_mdot7"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_uqfl5"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_wkrdv"]
 radius = 50.0
 
-[sub_resource type="SphereMesh" id="SphereMesh_cgjl8"]
+[sub_resource type="SphereMesh" id="SphereMesh_fe3pc"]
 radius = 50.0
 height = 100.0
 
@@ -26,13 +26,13 @@ process_mode = 1
 mass = 10.0
 gravity_scale = 0.0
 lock_rotation = true
+custom_integrator = true
 linear_damp_mode = 1
 angular_damp_mode = 1
 script = ExtResource("3_mdot7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
-shape = SubResource("CircleShape2D_uqfl5")
-disabled = true
+shape = SubResource("CircleShape2D_wkrdv")
 
 [node name="MeshInstance2D" type="MeshInstance2D" parent="RigidBody2D"]
-mesh = SubResource("SphereMesh_cgjl8")
+mesh = SubResource("SphereMesh_fe3pc")

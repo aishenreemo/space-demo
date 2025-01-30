@@ -11,10 +11,10 @@ func _on_pressed() -> void:
 	self.text = "PAUSE" if tree.paused else "CONTINUE"
 	get_tree().paused = !tree.paused
 	
-	var simulation = owner.get_node("Simulation")
-	var bodies = simulation.get_children()
-	for body in bodies:
-		var trajectory = body.get_node("Trajectory2D")
-		trajectory.visible = tree.paused
-		if tree.paused:
-			trajectory.clear_points()
+	if owner.simulation_node is NBodySimulation:
+		var bodies = owner.simulation_node.get_children()
+		for body in bodies:
+			var trajectory = body.get_node("Trajectory2D")
+			trajectory.visible = tree.paused
+			if tree.paused:
+				trajectory.clear_points()

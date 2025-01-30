@@ -13,7 +13,6 @@ func _physics_process(delta: float) -> void:
 	var bodies = self.get_children() as Array[CelestialBody]
 	var trj_map_fn = func(b): return b.get_node("Trajectory2D") as Line2D
 	var trajectories = bodies.map(trj_map_fn)
-	var time_step = delta * 0.5
 	
 	if bodies.size() != trajectories.size():
 		push_error("Body and trajectory sizes mismatch.")
@@ -34,19 +33,19 @@ func _physics_process(delta: float) -> void:
 	var masses = bodies.map(mmap_fn)
 	var positions = rbodies.map(pmap_fn)
 	var velocities = rbodies.map(vmap_fn)
-	
 	while current_time < self.prediction_duration:
 		var forces = NBodySimulation.calculate_forces(
 			self.gravitational_constant,
 			masses,
 			positions
 		)
+		
 		for i in forces.size():
-			velocities[i] += (forces[i] / masses[i]) * time_step
+			velocities[i] += (forces[i] / masses[i]) * delta
 			positions[i] += velocities[i] * delta
 			trajectories[i].add_point(positions[i])
 		
-		current_time += time_step
+		current_time += delta
 
 static func calculate_forces(
 	gc: float,
@@ -71,7 +70,13 @@ static func calculate_forces(
 			if a == b:
 				continue
 			
-			force += NBodySimulation.calculate_force(gc, mass_a, mass_b, pos_a, pos_b)
+			force += NBodySimulation.calculate_force(
+				gc,
+				mass_a,
+				mass_b,
+				pos_a,
+				pos_b
+			)
 		
 		out.push_back(force)
 		
